@@ -10,7 +10,25 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Delete, MoreHoriz, Security} from "@mui/icons-material";
-import { ArrowUpDown, ArrowUpIcon, Edit, EyeIcon } from "lucide-react";
+import { ArrowUpDown, Edit, EyeIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { signal } from "@preact/signals-react";
+
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+  } from "@/components/ui/dialog"
+import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi";
+import { suppliers } from "./SuppliersBrowsing";
+  
+const suppliersDiligenceApi = new SuppliersDiligenceApi();
+export const selectedRow = signal("")
 
 export const columns: ColumnDef<SupplierModel>[] = [
     {
@@ -56,13 +74,31 @@ export const columns: ColumnDef<SupplierModel>[] = [
                         <EyeIcon className="mr-3"/> View
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {}}>
-                        <Edit className="mr-3"/> Edit
+                    <DropdownMenuItem onClick={() => {
+                        selectedRow.value = row.id
+                    }}>
+                        <Edit className="mr-3"/><Link to={"/edit-supplier"}>Edit</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {}}>
-                        <Delete className="mr-3"/> Delete
-                    </DropdownMenuItem>
+                    <Dialog>
+                        <DialogTrigger><Delete className="mr-3"/> Delete</DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                <DialogDescription>
+                                    This action cannot be undone. This will permanently delete your account
+                                    and remove your data from our servers.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter className="sm:justify-end">
+                                <DialogClose asChild>
+                                <Button type="button" variant="destructive" onClick={() => suppliersDiligenceApi.deleteSupplier(suppliers.value[row.id].id)}>
+                                    Delete
+                                </Button>
+                                </DialogClose>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => {}}>
                         <Security className="mr-3"/> Screening
