@@ -10,16 +10,30 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { Delete, MoreHoriz, Security} from "@mui/icons-material";
-import { Edit, EyeIcon } from "lucide-react";
+import { ArrowUpDown, ArrowUpIcon, Edit, EyeIcon } from "lucide-react";
 
 export const columns: ColumnDef<SupplierModel>[] = [
     {
         accessorKey: "tradeName",
-        header: "Trade Name"
+        header: ({column}) => {
+            return <Button variant="ghost" onClick={() => {
+                column.toggleSorting(column.getIsSorted() === "asc")
+            }}>
+                Trade Name
+                <ArrowUpDown/>
+            </Button>
+        }
     },
     {
         accessorKey: "lastModificationDate",
-        header: "Last Modified",
+        header: ({column}) => {
+            return <Button variant="ghost" onClick={()=>{
+                column.toggleSorting(column.getIsSorted() === "asc")
+            }}>
+                Last Modification Date
+                <ArrowUpDown/>
+            </Button>
+        },
         cell: ({row}) => {
             const date = row.getValue('lastModificationDate');
             return <div>

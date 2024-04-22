@@ -1,14 +1,13 @@
 'use client'
 
-import React from "react"
-
 import {
     flexRender,
     getCoreRowModel,
     useReactTable,
     ColumnDef,
     getPaginationRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    SortingState
 } from "@tanstack/react-table"
 
 import {
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/table"
 import { Box } from "@mui/material"
 import { Button } from "../ui/button"
+import { useState } from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[],
@@ -31,6 +31,8 @@ export function DataTable<TData, TValue>({
     columns,
     data
 }:DataTableProps<TData, TValue>) {
+    // const sorting = signal<SortingState>(SortingState)
+    const [sorting, setSorting] = useState<SortingState>([])
 
     const table = useReactTable({ 
         data,
@@ -39,6 +41,8 @@ export function DataTable<TData, TValue>({
         getCoreRowModel: getCoreRowModel(), // its like a configuration
         getPaginationRowModel: getPaginationRowModel(),  // Adding pagination functionality
         getSortedRowModel: getSortedRowModel(),
+        state: { sorting },
+        onSortingChange: setSorting
     })
 
     return <Box>
