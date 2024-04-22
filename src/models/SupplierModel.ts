@@ -10,5 +10,5 @@ export type SupplierModel = {
     physicalAddress: string
     country: string
     annualReportInUSD: number
-    lastModificationDate: Date
+    lastModificationDate?: Date
 }

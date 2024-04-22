@@ -9,8 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { Delete, MoreHoriz, ScreenLockLandscape, Security, SecuritySharp, Verified } from "@mui/icons-material";
-import { Edit, Edit2, Edit3, EyeIcon } from "lucide-react";
+import { Delete, MoreHoriz, Security} from "@mui/icons-material";
+import { Edit, EyeIcon } from "lucide-react";
 
 export const columns: ColumnDef<SupplierModel>[] = [
     {
