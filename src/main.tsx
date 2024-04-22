@@ -44,12 +44,17 @@ const router = createBrowserRouter([
     
 ]);
 
-const store = createStore({
+interface IUserData {
+    email: string;
+    id: string;
+};
+
+const store = createStore<IUserData>({
     authName:'_auth',
-    authType:'cookie',
+    authType:'localstorage',
     cookieDomain: window.location.hostname,
-    cookieSecure: false,
-    // cookieSecure: window.location.protocol === 'https:',
+    // cookieSecure: false,
+    cookieSecure: window.location.protocol === 'https:',
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

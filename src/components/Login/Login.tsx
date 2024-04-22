@@ -47,7 +47,7 @@ export function Login() {
             const response = await suppliersDiligenceApi.authenticate(values.email, values.password)
             if(signIn({
                 auth: {
-                    token: response.accessToken,
+                    token: 'response.accessToken',
                     type: "Bearer",
                 },
                 // refresh: response.refreshToken,
@@ -56,7 +56,7 @@ export function Login() {
                     id: "1"
                 }
             })){
-                console.log(response.accessToken)
+                localStorage.setItem('token', response.accessToken)
                 navigate('/')
             } else {
                 console.log('error in auth')

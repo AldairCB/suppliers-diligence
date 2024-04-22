@@ -1,15 +1,32 @@
 import { SupplierModel } from "@/models/SupplierModel";
+import axios from "axios";
 
-const accesToken = "CfDJ8F3jQ2YFD-tKl-cFvTVF5YPImqPy2EH5Og1nnd0gIo_DnX-y4lcz9CeNvp6hP2ZpasOY1_duFLJsneouqzHFa5su22maVo_qwS7lNqgK1OBpLTybpHqFj2VJSW82VFJuxN4DH_r00n8g7096Eji5lY1p6xtoQVJ9XoSYY92LzDoPQBatLwqGtkZPc_dDV_GrZr-cHRikznPN-fyLQRCwwAixEYvBHHi9eiUY1QYi9j-EiZF4z-itS-UTpB3GJ8vvM_ZKFIc7aun0JDCbbAAbjrmZwQq7kGw2NhF9IfroT8Npgwl5eioqjARKytjZw4Y71ljHcaRJxLgoK7X72Qot2IniL3c6_6z34LZ27JjV4svJNrPfjyR6kIbFqhhMeVH07jKt1oBFfulFlR9SZL8OuONLsKXBd90oECxIK10ia1GFe6UeV8VPTzjZghoBgZmKTpPmp2DNhlNCTTUI2jhiJUAoLNcudSeZ38CQU_CydzNmHIWM1eXvLmx6pb8yQpReNJci788QgpdDwx9PJk9LOjuH2YvCcA3e_S4HqwxOlMXvE36IuNkx72ERMIgXrGvKiLznNM7KwUF53pJas9QV5ZzHLLX_RgovgFXErBFs8kyuOcIkdhjk470nDLW3BGaLKZMKfk6bfw2H5TVxAKmO3_QppEetoYYy4BMtJFHgBVz-Jfac3UIflu3fa8iTrohT9Q"
 
 export class SuppliersDiligenceApi {
     readonly baseURL: string = "http://localhost:5284";
 
+    getToken() {
+        return localStorage.getItem('token')
+    }
+
     async authenticate(email: string, password: string) {
         let headers = {
-            "Accept": "*/*",
+            "Accept": "application/json",
             'Content-Type': 'application/json',
         }
+        
+        // axios.post(
+        //     encodeURI(`${this.baseURL}/login`),
+        //     JSON.stringify({ email, password }),
+        //     {
+        //         headers,
+        //         withCredentials: true
+        //     },
+        // ).then(({data}) => {
+        //     console.log(`Axios: ${typeof data}`);
+        //     return data;
+        // })
+        
         const response = await fetch(encodeURI(`${this.baseURL}/login`), {
             method: 'POST',
             headers: headers,
@@ -23,7 +40,7 @@ export class SuppliersDiligenceApi {
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accesToken}`
+            "Authorization": `Bearer ${this.getToken()}`
         }
         const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers`), {
             method: 'GET',
@@ -36,7 +53,7 @@ export class SuppliersDiligenceApi {
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accesToken}`
+            "Authorization": `Bearer ${this.getToken()}`
         }
 
         const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers`), {
@@ -55,7 +72,7 @@ export class SuppliersDiligenceApi {
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accesToken}`
+            "Authorization": `Bearer ${this.getToken()}`
         }
         const response = await fetch((encodeURI(`${this.baseURL}/api/suppliers/${id}`)), {
             method: 'PUT',
@@ -71,7 +88,7 @@ export class SuppliersDiligenceApi {
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accesToken}`
+            "Authorization": `Bearer ${this.getToken()}`
         }
         const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers/${id}`), {
             method: 'DELETE',
@@ -87,7 +104,7 @@ export class SuppliersDiligenceApi {
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
-            "Authorization": `Bearer ${accesToken}`
+            "Authorization": `Bearer ${this.getToken()}`
         }
         const response = await fetch(encodeURI(`${this.baseURL}/api/screen?entityName=${entityName}&ofac=${ofac}&worldBank=${worldBank}`), {
             method: 'GET',
