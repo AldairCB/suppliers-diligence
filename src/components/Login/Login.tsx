@@ -14,9 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Box } from "@mui/material"
-import { useNavigate } from "react-router-dom"
-import useSignIn from 'react-auth-kit/hooks/useSignIn';
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
+import { useAuth } from "@/context/useAuth"
 
 
 const formSchema = z.object({
@@ -24,15 +22,8 @@ const formSchema = z.object({
     password: z.string(),
 })
 
-interface IUserData {
-    email: string;
-    id: string;
-};
-
 export function Login() {
-    const navigate = useNavigate()
-    const signIn = useSignIn<IUserData>()
-
+    const { login } = useAuth();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,25 +33,10 @@ export function Login() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const suppliersDiligenceApi = new SuppliersDiligenceApi();
         try {
-            const response = await suppliersDiligenceApi.authenticate(values.email, values.password)
-            if(signIn({
-                auth: {
-                    token: 'response.accessToken',
-                    type: "Bearer",
-                },
-                // refresh: response.refreshToken,
-                userState: {
-                    email: values.email,
-                    id: "1"
-                }
-            })){
-                localStorage.setItem('token', response.accessToken)
-                navigate('/')
-            } else {
-                console.log('error in auth')
-            }
+            console.log('hi')
+            await login(values.email, values.password)
+            console.log('bye')
         } catch (error) {
             console.log(error)
         }
