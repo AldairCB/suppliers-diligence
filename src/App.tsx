@@ -5,7 +5,7 @@ import SuppliersBrowsing from './components/SuppliersBrowsing/SuppliersBrowsing'
 import { Login } from './components/Login/Login'
 import { NewSupplierForm } from './components/NewSupplierForm/NewSupplierForm'
 import { EditSupplierForm } from './components/EditSupplierForm/EditSupplierForm'
-import { useAuth } from './context/useAuth'
+import { AuthProvider, useAuth } from './hooks/useAuth'
 import { ReactNode } from 'react'
 
 type ProtectedRouteProps = {
@@ -24,12 +24,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 function App() {
     return (
         <Box className="container py-10 px-20 mx-auto">
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/" element={<ProtectedRoute><SuppliersBrowsing /></ProtectedRoute>} />
-                <Route path="/new-supplier" element={<ProtectedRoute><NewSupplierForm /></ProtectedRoute>} />
-                <Route path="/edit-supplier" element={<ProtectedRoute><EditSupplierForm /></ProtectedRoute>} />
-            </Routes>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<ProtectedRoute><SuppliersBrowsing /></ProtectedRoute>} />
+                    <Route path="/new-supplier" element={<ProtectedRoute><NewSupplierForm /></ProtectedRoute>} />
+                    <Route path="/edit-supplier" element={<ProtectedRoute><EditSupplierForm /></ProtectedRoute>} />
+                </Routes>
+            </AuthProvider>
         </Box>
     )
 }

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Box } from "@mui/material"
-import { useAuth } from "@/context/useAuth"
+import { useAuth } from "@/hooks/useAuth"
 
 
 const formSchema = z.object({
@@ -34,9 +34,7 @@ export function Login() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
-            console.log('hi')
             await login(values.email, values.password)
-            console.log('bye')
         } catch (error) {
             console.log(error)
         }

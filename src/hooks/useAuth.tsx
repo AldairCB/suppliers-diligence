@@ -26,7 +26,6 @@ export const AuthProvider = ({children}: Props) => {
     const navigate = useNavigate();
 
     const login = async (email: string, password: string) => {
-        console.log('inside login')
         const suppliersDiligenceApi = new SuppliersDiligenceApi();
         const response = await suppliersDiligenceApi.authenticate(email, password)
         setUser({email, ...response})
