@@ -7,9 +7,10 @@ import { Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useSignals } from '@preact/signals-react/runtime'
+import { SupplierModel } from '@/models/SupplierModel'
 
 // signal that able to be globally available for all the components when exporting them
-export const suppliers = signal([])
+export const suppliers = signal<SupplierModel[]>([])
 
 export default function SuppliersBrowsing() {
     // in preact v2 we need to add this to the component in order to be able to use global signals() inside a component
