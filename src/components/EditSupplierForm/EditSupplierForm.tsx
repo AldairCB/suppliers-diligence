@@ -17,7 +17,6 @@ import { Box, Grid } from "@mui/material"
 import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { suppliers } from "@/components/SuppliersBrowsing/SuppliersBrowsing"
-import { selectedRow } from "../SuppliersBrowsing/columns"
 import { useNavigate } from "react-router-dom"
 
 
@@ -43,7 +42,8 @@ const formSchema = z.object({
 
 export function EditSupplierForm() {
     const navigate = useNavigate()
-    const supplierSelected = suppliers.value[selectedRow.value]
+    const supplierSelected = suppliers.value[0]
+    // const supplierSelected = suppliers.value[selectedRow.value]
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -76,7 +76,7 @@ export function EditSupplierForm() {
         const suppliersDiligenceApi = new SuppliersDiligenceApi();
         suppliersDiligenceApi.updateSupplier(supplier).then(
             async () => {
-                suppliers.value = await suppliersDiligenceApi.getAllSuppliers().then(() => navigate(-1))
+                // suppliers.value = await suppliersDiligenceApi.getAllSuppliers().then(() => navigate(-1))
             }
         )
         

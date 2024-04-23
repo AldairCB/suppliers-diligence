@@ -23,16 +23,18 @@ export default function SuppliersBrowsing() {
 
     // every single time a value from a signal isnide an effect changes, this will be called
     effect(() => {
-        const getSuppliers = async () => {
-            try {
-                suppliers.value = await suppliersDiligenceApi.getAllSuppliers()
-                console.log(suppliers.value)
-                isLoading.value = false
-            } catch (error) {
-                console.error(`Error while trying to fetch suppliers data: ${error}`)
+        if(suppliers.value.length === 0){
+            const getSuppliers = async () => {
+                try {
+                    suppliers.value = await suppliersDiligenceApi.getAllSuppliers()
+                    console.log(suppliers.value)
+                    isLoading.value = false
+                } catch (error) {
+                    console.error(`Error while trying to fetch suppliers data: ${error}`)
+                }
             }
+            getSuppliers()
         }
-        getSuppliers()
     })
     
     console.log(`isLoading: ${isLoading.value}`)
