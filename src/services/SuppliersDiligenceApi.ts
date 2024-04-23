@@ -3,10 +3,16 @@ import axios from "axios";
 
 
 export class SuppliersDiligenceApi {
-    readonly baseURL: string = "http://localhost:5284";
+    readonly baseURL: string = "http://localhost:5284"
+
+    user: any
+
+    constructor(user?: any) {
+        this.user = user
+    }
 
     getToken() {
-        return localStorage.getItem('token')
+        return this.user.accessToken
     }
 
     async authenticate(email: string, password: string) {
@@ -37,6 +43,10 @@ export class SuppliersDiligenceApi {
     }
 
     async getAllSuppliers() {
+        if (!this.getToken()){
+            console.log("No token")
+            return
+        }
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
@@ -50,6 +60,10 @@ export class SuppliersDiligenceApi {
         return suppliers;
     }
     async createSupplier(supplier: SupplierModel) {
+        if (!this.getToken()){
+            console.log("No token")
+            return
+        }
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
@@ -65,6 +79,10 @@ export class SuppliersDiligenceApi {
         return suppliers;
     }
     async updateSupplier(supplier: SupplierModel) {
+        if (!this.getToken()){
+            console.log("No token")
+            return
+        }
         const id = supplier.id
         console.log(supplier)
         delete (supplier as {occupation?: string}).occupation;
@@ -84,7 +102,10 @@ export class SuppliersDiligenceApi {
     }
 
     async deleteSupplier(id: string) {
-        
+        if (!this.getToken()){
+            console.log("No token")
+            return
+        }
         let headers = {
             "Accept": "*/*",
             'Content-Type': 'application/json',
@@ -100,6 +121,10 @@ export class SuppliersDiligenceApi {
 
 
     async screenEntity(entityName: string, ofac: boolean, worldBank: boolean) {
+        if (!this.getToken()){
+            console.log("No token")
+            return
+        }
         // Converting entityName to url notation 
         let headers = {
             "Accept": "*/*",

@@ -1,5 +1,5 @@
-import { SupplierModel } from "@/models/SupplierModel";
-import { ColumnDef } from "@tanstack/react-table";
+import { SupplierModel } from "@/models/SupplierModel"
+import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,10 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { Delete, MoreHoriz, Security} from "@mui/icons-material";
-import { ArrowUpDown, Edit, EyeIcon } from "lucide-react";
-import { Link } from "react-router-dom";
-import { signal } from "@preact/signals-react";
+import { Delete, MoreHoriz, Security} from "@mui/icons-material"
+import { ArrowUpDown, Edit, EyeIcon } from "lucide-react"
+import { Link } from "react-router-dom"
 
 import {
     Dialog,
@@ -24,11 +23,10 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi";
-import { suppliers } from "./SuppliersBrowsing";
+import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
+import { suppliers } from "./SuppliersBrowsing"
   
 const suppliersDiligenceApi = new SuppliersDiligenceApi();
-export const selectedRow = signal("")
 
 export const columns: ColumnDef<SupplierModel>[] = [
     {
@@ -74,10 +72,8 @@ export const columns: ColumnDef<SupplierModel>[] = [
                         <EyeIcon className="mr-3"/> View
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {
-                        selectedRow.value = row.id
-                    }}>
-                        <Edit className="mr-3"/><Link to={"/edit-supplier"}>Edit</Link>
+                    <DropdownMenuItem onClick={() => {}}>
+                        <Edit className="mr-3"/><Link to={"/edit-supplier"} state={{supplier: suppliers.value[+row.id]}}>Edit</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <Dialog>
@@ -92,7 +88,9 @@ export const columns: ColumnDef<SupplierModel>[] = [
                             </DialogHeader>
                             <DialogFooter className="sm:justify-end">
                                 <DialogClose asChild>
-                                <Button type="button" variant="destructive" onClick={() => suppliersDiligenceApi.deleteSupplier(suppliers.value[row.id].id)}>
+                                <Button type="button" variant="destructive" onClick={
+                                    () => suppliersDiligenceApi.deleteSupplier(suppliers.value[+row.id].id!)
+                                }>
                                     Delete
                                 </Button>
                                 </DialogClose>

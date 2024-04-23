@@ -14,8 +14,6 @@ import { ThemeProvider } from './components/theme-provider.tsx';
 import SuppliersBrowsing from './components/SuppliersBrowsing/SuppliersBrowsing.tsx';
 import { EditSupplierForm } from './components/EditSupplierForm/EditSupplierForm.tsx';
 import { Login } from './components/Login/Login.tsx';
-import AuthProvider from 'react-auth-kit';
-import createStore from 'react-auth-kit/createStore';
 
 const router = createBrowserRouter([
     {
@@ -41,30 +39,14 @@ const router = createBrowserRouter([
         path: "/login",
         element: <Login/>
     },
-    
-]);
-
-interface IUserData {
-    email: string;
-    id: string;
-};
-
-const store = createStore<IUserData>({
-    authName:'_auth',
-    authType:'localstorage',
-    cookieDomain: window.location.hostname,
-    // cookieSecure: false,
-    cookieSecure: window.location.protocol === 'https:',
-});
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <AuthProvider store={store}>
-                <BrowserRouter>
-                    <App/>
-                </BrowserRouter>
-            </AuthProvider>
+            <BrowserRouter>
+                <App/>
+            </BrowserRouter>
             {/* <RouterProvider router={router} /> */}
         </ThemeProvider>
     </React.StrictMode>,
