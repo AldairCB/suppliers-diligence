@@ -1,4 +1,4 @@
-import { effect, signal } from '@preact/signals-react'
+import { effect, signal, useSignal } from '@preact/signals-react'
 import { DataTable } from '../DataTable/DataTable'
 import { columns } from './columns'
 import { SuppliersDiligenceApi } from '@/services/SuppliersDiligenceApi'
@@ -6,13 +6,19 @@ import { Button } from '../ui/button'
 import { Box, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
+import { useSignals } from '@preact/signals-react/runtime'
 
+// signal that able to be globally available for all the components when exporting them
 export const suppliers = signal([])
-const isLoading = signal(true)
 
 export default function SuppliersBrowsing() {
+    // in preact v2 we need to add this to the component in order to be able to use global signals() inside a component
+    useSignals();
     const { user } = useAuth();
     const suppliersDiligenceApi = new SuppliersDiligenceApi(user);
+
+    // signal for local use
+    const isLoading = useSignal(false)
 
     // every single time a value from a signal isnide an effect changes, this will be called
     effect(() => {

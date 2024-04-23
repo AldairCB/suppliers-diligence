@@ -25,7 +25,6 @@ import {
     DialogTrigger,
   } from "@/components/ui/dialog"
 import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi";
-import { suppliers } from "./SuppliersBrowsing";
   
 const suppliersDiligenceApi = new SuppliersDiligenceApi();
 export const selectedRow = signal("")
@@ -92,9 +91,9 @@ export const columns: ColumnDef<SupplierModel>[] = [
                             </DialogHeader>
                             <DialogFooter className="sm:justify-end">
                                 <DialogClose asChild>
-                                <Button type="button" variant="destructive" onClick={() => suppliersDiligenceApi.deleteSupplier(suppliers.value[row.id].id)}>
+                                {/* <Button type="button" variant="destructive" onClick={() => suppliersDiligenceApi.deleteSupplier(suppliers.value[selectedRow.value].id)}>
                                     Delete
-                                </Button>
+                                </Button> */}
                                 </DialogClose>
                             </DialogFooter>
                         </DialogContent>
