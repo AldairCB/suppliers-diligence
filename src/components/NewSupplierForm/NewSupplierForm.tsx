@@ -17,7 +17,6 @@ import { Box, Grid } from "@mui/material"
 import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useNavigate } from "react-router-dom"
-import { suppliers } from "../SuppliersBrowsing/SuppliersBrowsing"
 
 
 const formSchema = z.object({
@@ -72,9 +71,7 @@ export function NewSupplierForm() {
         }
         const suppliersDiligenceApi = new SuppliersDiligenceApi();
         suppliersDiligenceApi.createSupplier(supplier).then(
-            async () => {
-                // suppliers.value = await suppliersDiligenceApi.getAllSuppliers().then(() => navigate(-1))
-            }
+            () => navigate(-1)
         )
         
     }

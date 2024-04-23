@@ -73,7 +73,7 @@ export const columns: ColumnDef<SupplierModel>[] = [
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => {}}>
-                        <Edit className="mr-3"/><Link to={"/edit-supplier"}>Edit</Link>
+                        <Edit className="mr-3"/><Link to={"/edit-supplier"} state={{supplier: suppliers.value[+row.id]}}>Edit</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <Dialog>

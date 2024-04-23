@@ -16,8 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Box, Grid } from "@mui/material"
 import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
-import { suppliers } from "@/components/SuppliersBrowsing/SuppliersBrowsing"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const formSchema = z.object({
@@ -42,27 +41,28 @@ const formSchema = z.object({
 
 export function EditSupplierForm() {
     const navigate = useNavigate()
-    const supplierSelected = suppliers.value[0]
-    // const supplierSelected = suppliers.value[selectedRow.value]
+    const location = useLocation()
+    const { supplier } = location.state
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            businessName: supplierSelected.businessName,
-            tradeName: supplierSelected.tradeName,
-            ruc: supplierSelected.ruc,
-            phoneNumber: supplierSelected.phoneNumber,
-            email: supplierSelected.email,
-            website: supplierSelected.website,
-            physicalAddress: supplierSelected.physicalAddress,
-            country: supplierSelected.country,
-            annualReportInUSD: supplierSelected.annualReportInUSD.toString(),
+            businessName: supplier.businessName,
+            tradeName: supplier.tradeName,
+            ruc: supplier.ruc,
+            phoneNumber: supplier.phoneNumber,
+            email: supplier.email,
+            website: supplier.website,
+            physicalAddress: supplier.physicalAddress,
+            country: supplier.country,
+            annualReportInUSD: supplier.annualReportInUSD.toString(),
         },
     })
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
-        const supplier: SupplierModel = {
-            id: supplierSelected.id,
+        const updatedSupplier: SupplierModel = {
+            id: supplier.id,
             businessName: values.businessName,
             tradeName: values.tradeName,
             ruc: values.ruc,
@@ -74,12 +74,9 @@ export function EditSupplierForm() {
             annualReportInUSD: +values.annualReportInUSD //this converts to number
         }
         const suppliersDiligenceApi = new SuppliersDiligenceApi();
-        suppliersDiligenceApi.updateSupplier(supplier).then(
-            async () => {
-                // suppliers.value = await suppliersDiligenceApi.getAllSuppliers().then(() => navigate(-1))
-            }
+        suppliersDiligenceApi.updateSupplier(updatedSupplier).then(
+            () => navigate(-1)
         )
-        
     }
 
     return (
@@ -188,7 +185,7 @@ export function EditSupplierForm() {
                             )}/>
                         </Grid>
                     </Grid>
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit">Confirm changes</Button>
                 </form>
             </Form>
         </Box>                    

@@ -11,6 +11,7 @@ import { SupplierModel } from '@/models/SupplierModel'
 
 // signal that able to be globally available for all the components when exporting them
 export const suppliers = signal<SupplierModel[]>([])
+// export const api = signal<SuppliersDiligenceApi>(new SuppliersDiligenceApi())
 
 export default function SuppliersBrowsing() {
     // in preact v2 we need to add this to the component in order to be able to use global signals() inside a component
