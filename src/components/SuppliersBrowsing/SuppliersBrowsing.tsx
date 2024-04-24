@@ -1,6 +1,6 @@
 import { signal } from '@preact/signals-react'
 import { DataTable } from '../DataTable/DataTable'
-import { columns } from './columns'
+import { getColumns, supplierToDeleteId } from './columns'
 import SuppliersDiligenceApi from '@/services/SuppliersDiligenceApi'
 import { Button } from '../ui/button'
 import { Box, Typography } from '@mui/material'
@@ -9,18 +9,26 @@ import { useSignals } from '@preact/signals-react/runtime'
 import { SupplierModel } from '@/models/SupplierModel'
 import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState } from 'react'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+  } from "@/components/ui/dialog"
 
 // signal that able to be globally available for all the components when exporting them
 export const suppliers = signal<SupplierModel[]>([])
-// export const api = signal<SuppliersDiligenceApi>(new SuppliersDiligenceApi())
 
 export default function SuppliersBrowsing() {
     // in preact v2 we need to add this to the component in order to be able to use global signals() inside a component
     useSignals()
     const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance();
 
-    // signal for local use
     const [isLoading, setIsLoading] = useState(true)
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const { logout } = useAuth()
 
     async function fetchSuppliers(){
@@ -44,6 +52,35 @@ export default function SuppliersBrowsing() {
                 <Link to={"/new-supplier"}>Add Supplier</Link>
             </Button>
         </Box>
-        <DataTable columns={columns} data={suppliers.value}/>
+        <DataTable columns={getColumns({
+            handleView: () => {console.log("Viewing")},
+            handleEdit: () => {console.log("Editing")},
+            handleDelete: () => {setShowDeleteDialog(true)},
+            handleScreen: () => {console.log("Screening")}
+        })} data={suppliers.value}/>
+
+        <Dialog open={showDeleteDialog} onOpenChange={
+            (open) => setShowDeleteDialog(open)
+        }>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your the selected supplier.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="sm:justify-end">
+                    <DialogClose asChild>
+                        <Button type="button" variant="destructive" onClick={() => {
+                            suppliersDiligenceApi.deleteSupplier(supplierToDeleteId.value).then(() => {
+                                fetchSuppliers()
+                            })
+                        }}>
+                            Yes, delete
+                        </Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </Box>
 }

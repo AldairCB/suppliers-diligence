@@ -7,6 +7,7 @@ export default class SuppliersDiligenceApi {
     readonly baseURL: string = "http://localhost:5284"
     
     public static getInstance(): SuppliersDiligenceApi {
+        // Singleton Pattern
         if (!SuppliersDiligenceApi.instance) {
             SuppliersDiligenceApi.instance = new SuppliersDiligenceApi();
         }
@@ -40,13 +41,6 @@ export default class SuppliersDiligenceApi {
             { headers: headers, withCredentials: true, validateStatus: () => true }
         )
         return response.data
-        // const response = await fetch(encodeURI(`${this.baseURL}/login`), {
-        //     method: 'POST',
-        //     headers: headers,
-        //     credentials: 'include',
-        //     body: JSON.stringify({ email, password })
-        // });
-        // return await response.json()
     }
 
     async getAllSuppliers() {
