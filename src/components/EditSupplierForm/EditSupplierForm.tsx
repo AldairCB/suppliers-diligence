@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Box, Grid } from "@mui/material"
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
+import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useLocation, useNavigate } from "react-router-dom"
 
@@ -39,7 +39,8 @@ const formSchema = z.object({
     annualReportInUSD: z.string()
 })
 
-export function EditSupplierForm() {
+export default function EditSupplierForm() {
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance()
     const navigate = useNavigate()
     const location = useLocation()
     const { supplier } = location.state
@@ -73,7 +74,6 @@ export function EditSupplierForm() {
             country: values.country,
             annualReportInUSD: +values.annualReportInUSD //this converts to number
         }
-        const suppliersDiligenceApi = new SuppliersDiligenceApi();
         suppliersDiligenceApi.updateSupplier(updatedSupplier).then(
             () => navigate(-1)
         )

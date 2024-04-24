@@ -23,10 +23,10 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
+import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { suppliers } from "./SuppliersBrowsing"
   
-const suppliersDiligenceApi = new SuppliersDiligenceApi();
+const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance()
 
 export const columns: ColumnDef<SupplierModel>[] = [
     {

@@ -1,5 +1,5 @@
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi";
-import { ReactNode, createContext, useContext, useMemo, useState } from "react";
+import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi";
+import { ReactNode, createContext, useContext, useMemo } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { useNavigate } from "react-router-dom";
 
@@ -23,12 +23,13 @@ const AuthContext = createContext<IAuthContext>(initialValues)
 
 export const AuthProvider = ({children}: Props) => {
     const [user, setUser] = useLocalStorage("user", null);
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance();
     const navigate = useNavigate();
 
     const login = async (email: string, password: string) => {
-        const suppliersDiligenceApi = new SuppliersDiligenceApi();
         const response = await suppliersDiligenceApi.authenticate(email, password)
         setUser({email, ...response})
+        suppliersDiligenceApi.injectAccessToken(response.accessToken)
         navigate('/')
     }
     const logout = () => {

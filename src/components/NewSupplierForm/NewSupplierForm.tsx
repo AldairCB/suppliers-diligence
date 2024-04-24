@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Box, Grid } from "@mui/material"
-import { SuppliersDiligenceApi } from "@/services/SuppliersDiligenceApi"
+import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useNavigate } from "react-router-dom"
 
@@ -40,6 +40,7 @@ const formSchema = z.object({
 })
 
 export function NewSupplierForm() {
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance()
     const navigate = useNavigate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -69,7 +70,7 @@ export function NewSupplierForm() {
             country: values.country,
             annualReportInUSD: +values.annualReportInUSD //this converts to number
         }
-        const suppliersDiligenceApi = new SuppliersDiligenceApi();
+        
         suppliersDiligenceApi.createSupplier(supplier).then(
             () => navigate(-1)
         )

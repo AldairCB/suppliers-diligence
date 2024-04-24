@@ -4,42 +4,10 @@ import App from './App.tsx'
 import './index.css'
 
 import {
-    BrowserRouter,
-    createBrowserRouter,
+    BrowserRouter
 } from "react-router-dom";
 
-import ErrorPage from './ErrorPage.tsx';
-import { NewSupplierForm } from './components/NewSupplierForm/NewSupplierForm.tsx';
-import { ThemeProvider } from './components/theme-provider.tsx';
-import SuppliersBrowsing from './components/SuppliersBrowsing/SuppliersBrowsing.tsx';
-import { EditSupplierForm } from './components/EditSupplierForm/EditSupplierForm.tsx';
-import { Login } from './components/Login/Login.tsx';
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App/>,
-        errorElement: <ErrorPage/>,
-        children: [
-            {
-                path: "/suppliers",
-                element: <SuppliersBrowsing/>
-            },
-            {
-                path: "/new-supplier",
-                element: <NewSupplierForm/>
-            },
-            {
-                path: "/edit-supplier",
-                element: <EditSupplierForm/>
-            },
-        ],
-    },
-    {
-        path: "/login",
-        element: <Login/>
-    },
-])
+import { ThemeProvider } from './components/theme-provider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
@@ -47,7 +15,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <BrowserRouter>
                 <App/>
             </BrowserRouter>
-            {/* <RouterProvider router={router} /> */}
         </ThemeProvider>
     </React.StrictMode>,
 )

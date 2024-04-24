@@ -1,18 +1,32 @@
 import { SupplierModel } from "@/models/SupplierModel";
 import axios from "axios";
 
+export default class SuppliersDiligenceApi {
 
-export class SuppliersDiligenceApi {
+    private static instance: SuppliersDiligenceApi;
     readonly baseURL: string = "http://localhost:5284"
-
-    user: any
-
-    constructor(user?: any) {
-        this.user = user
+    
+    public static getInstance(): SuppliersDiligenceApi {
+        if (!SuppliersDiligenceApi.instance) {
+            SuppliersDiligenceApi.instance = new SuppliersDiligenceApi();
+        }
+        return SuppliersDiligenceApi.instance;
     }
 
-    getToken() {
-        return this.user.accessToken
+    constructor() {
+        axios.interceptors.response.use((response) => {
+            return response
+        }, (error) => {
+            return Promise.reject(error);
+        })
+    }
+
+    injectAccessToken(accessToken: string) {
+        axios.interceptors.request.use((config) => {
+            console.log('Injecting access token...');
+            config.headers.Authorization = `Bearer ${accessToken}`;
+            return config;
+        })
     }
 
     async authenticate(email: string, password: string) {
@@ -20,122 +34,87 @@ export class SuppliersDiligenceApi {
             "Accept": "application/json",
             'Content-Type': 'application/json',
         }
-        
-        // axios.post(
-        //     encodeURI(`${this.baseURL}/login`),
-        //     JSON.stringify({ email, password }),
-        //     {
-        //         headers,
-        //         withCredentials: true
-        //     },
-        // ).then(({data}) => {
-        //     console.log(`Axios: ${typeof data}`);
-        //     return data;
-        // })
-        
-        const response = await fetch(encodeURI(`${this.baseURL}/login`), {
-            method: 'POST',
-            headers: headers,
-            credentials: 'include',
-            body: JSON.stringify({ email, password })
-        });
-        return await response.json()
+        const response = await axios.post(
+            encodeURI(`${this.baseURL}/login`),
+            { email, password },
+            { headers: headers, withCredentials: true, validateStatus: () => true }
+        )
+        return response.data
+        // const response = await fetch(encodeURI(`${this.baseURL}/login`), {
+        //     method: 'POST',
+        //     headers: headers,
+        //     credentials: 'include',
+        //     body: JSON.stringify({ email, password })
+        // });
+        // return await response.json()
     }
 
     async getAllSuppliers() {
-        if (!this.getToken()){
-            console.log("No token")
-            return
-        }
         let headers = {
             "Accept": "*/*",
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${this.getToken()}`
+            'Content-Type': 'application/json'
         }
-        const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers`), {
-            method: 'GET',
-            headers: headers,
-        });
-        const suppliers = await response.json();
-        return suppliers;
+        const response = await axios.get(
+            encodeURI(`${this.baseURL}/api/suppliers`),
+            { headers: headers, validateStatus: () => true }
+        )
+        return response.data;
     }
-    async createSupplier(supplier: SupplierModel) {
-        if (!this.getToken()){
-            console.log("No token")
-            return
-        }
-        let headers = {
-            "Accept": "*/*",
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${this.getToken()}`
-        }
 
-        const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers`), {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(supplier)
-        });
-        const suppliers = await response.json();
-        return suppliers;
-    }
-    async updateSupplier(supplier: SupplierModel) {
-        if (!this.getToken()){
-            console.log("No token")
-            return
-        }
-        const id = supplier.id
-        console.log(supplier)
-        delete (supplier as {occupation?: string}).occupation;
-        console.log(supplier)
+    async createSupplier(supplier: SupplierModel) {
         let headers = {
             "Accept": "*/*",
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${this.getToken()}`
+            'Content-Type': 'application/json'
         }
-        const response = await fetch((encodeURI(`${this.baseURL}/api/suppliers/${id}`)), {
-            method: 'PUT',
-            headers: headers,
-            body: JSON.stringify(supplier)
-        });
-        const res = await response.json();
-        return res;
+        const response = await axios.post(
+            encodeURI(`${this.baseURL}/api/suppliers`),
+            supplier,
+            { headers: headers, validateStatus: () => true }
+        )
+        return response.data
+    }
+
+    async updateSupplier(supplier: SupplierModel) {
+        const id = supplier.id
+        
+        console.log(supplier)
+        delete (supplier as {id?: string}).id;
+        console.log(supplier)
+
+        let headers = {
+            "Accept": "*/*",
+            'Content-Type': 'application/json'
+        }
+        const response = await axios.put(
+            encodeURI(`${this.baseURL}/api/suppliers/${id}`),
+            supplier,
+            { headers: headers, validateStatus: () => true }
+        )
+        return response.data
     }
 
     async deleteSupplier(id: string) {
-        if (!this.getToken()){
-            console.log("No token")
-            return
-        }
         let headers = {
             "Accept": "*/*",
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${this.getToken()}`
+            'Content-Type': 'application/json'
         }
-        const response = await fetch(encodeURI(`${this.baseURL}/api/suppliers/${id}`), {
-            method: 'DELETE',
-            headers: headers
-        });
-        const res = await response.json();
-        return res;
+        const response = await axios.delete(
+            encodeURI(`${this.baseURL}/api/suppliers/${id}`),
+            { headers: headers, validateStatus: () => true }
+        )
+        return response.data
     }
 
-
     async screenEntity(entityName: string, ofac: boolean, worldBank: boolean) {
-        if (!this.getToken()){
-            console.log("No token")
-            return
-        }
         // Converting entityName to url notation 
         let headers = {
             "Accept": "*/*",
-            'Content-Type': 'application/json',
-            "Authorization": `Bearer ${this.getToken()}`
+            'Content-Type': 'application/json'
         }
-        const response = await fetch(encodeURI(`${this.baseURL}/api/screen?entityName=${entityName}&ofac=${ofac}&worldBank=${worldBank}`), {
-            method: 'GET',
-            headers: headers
-        });
-        const res = await response.json();
-        return res;
+        const response = await axios.get(
+            encodeURI(`${this.baseURL}/api/screen?entityName=${entityName}&ofac=${ofac}&worldBank=${worldBank}`),
+            { headers: headers, validateStatus: () => true }
+        )
+        return response.data
     }
 }
