@@ -77,7 +77,12 @@ export const getColumns = (params: params): ColumnDef<SupplierModel>[] => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
 
-                        <DropdownMenuItem onClick={params.handleView}>  
+                        <DropdownMenuItem onClick={
+                            () => {
+                                selectedSupplier.value = suppliers.value[+row.id]
+                                params.handleView()
+                            }
+                        }>  
                             <EyeIcon className="mr-3"/> View
                         </DropdownMenuItem>
 
@@ -99,7 +104,12 @@ export const getColumns = (params: params): ColumnDef<SupplierModel>[] => {
                             <Delete className="mr-3"/> Delete
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={params.handleScreen}>
+                        <DropdownMenuItem onClick={
+                            () => {
+                                selectedSupplier.value = suppliers.value[+row.id]
+                                params.handleScreen()
+                            }
+                        }>
                             <Security className="mr-3"/> Screening
                         </DropdownMenuItem>
 
