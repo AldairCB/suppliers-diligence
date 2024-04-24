@@ -10,7 +10,6 @@ import {
 
 import { Delete, MoreHoriz, Security} from "@mui/icons-material"
 import { ArrowUpDown, Edit, EyeIcon } from "lucide-react"
-import { Link } from "react-router-dom"
 
 import { suppliers } from "./SuppliersBrowsing"
 import { signal } from "@preact/signals-react"
