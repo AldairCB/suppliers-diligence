@@ -1,10 +1,10 @@
 import { signal } from '@preact/signals-react'
 import { DataTable } from '../DataTable/DataTable'
-import { getColumns, supplierToDeleteId } from './columns'
+import { getColumns, selectedSupplier } from './columns'
 import SuppliersDiligenceApi from '@/services/SuppliersDiligenceApi'
 import { Button } from '../ui/button'
 import { Box, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSignals } from '@preact/signals-react/runtime'
 import { SupplierModel } from '@/models/SupplierModel'
 import { useAuth } from '@/hooks/useAuth'
@@ -29,7 +29,9 @@ export default function SuppliersBrowsing() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [showScreeningDialog, setShowScreeningDialog] = useState(false)
     const { logout } = useAuth()
+    const navigate = useNavigate()
 
     async function fetchSuppliers(){
         suppliers.value = await suppliersDiligenceApi.getAllSuppliers()
@@ -53,10 +55,10 @@ export default function SuppliersBrowsing() {
             </Button>
         </Box>
         <DataTable columns={getColumns({
-            handleView: () => {console.log("Viewing")},
-            handleEdit: () => {console.log("Editing")},
-            handleDelete: () => {setShowDeleteDialog(true)},
-            handleScreen: () => {console.log("Screening")}
+            handleView: () => { console.log("Viewing") },
+            handleEdit: () => { navigate("/edit-supplier", { state: { supplier: selectedSupplier.value } }) },
+            handleDelete: () => { setShowDeleteDialog(true) },
+            handleScreen: () => { setShowScreeningDialog(true) }
         })} data={suppliers.value}/>
 
         <Dialog open={showDeleteDialog} onOpenChange={
@@ -66,17 +68,39 @@ export default function SuppliersBrowsing() {
                 <DialogHeader>
                     <DialogTitle>Are you absolutely sure?</DialogTitle>
                     <DialogDescription>
-                        This action cannot be undone. This will permanently delete your the selected supplier.
+                        This action cannot be undone. This will permanently delete the selected supplier.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="sm:justify-end">
                     <DialogClose asChild>
                         <Button type="button" variant="destructive" onClick={() => {
-                            suppliersDiligenceApi.deleteSupplier(supplierToDeleteId.value).then(() => {
+                            suppliersDiligenceApi.deleteSupplier(selectedSupplier.value.id!).then(() => {
                                 fetchSuppliers()
                             })
                         }}>
                             Yes, delete
+                        </Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+
+        <Dialog open={showScreeningDialog} onOpenChange={
+            (open) => setShowScreeningDialog(open)
+        }>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Entity Screening</DialogTitle>
+                    <DialogDescription>
+                        Select the sources for the screening
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="sm:justify-end">
+                    <DialogClose asChild>
+                        <Button type="button" variant="default" onClick={() => {
+                            console.log('Screening...')
+                        }}>
+                            Start Screening
                         </Button>
                     </DialogClose>
                 </DialogFooter>

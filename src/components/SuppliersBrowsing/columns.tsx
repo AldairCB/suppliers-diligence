@@ -15,7 +15,19 @@ import { Link } from "react-router-dom"
 import { suppliers } from "./SuppliersBrowsing"
 import { signal } from "@preact/signals-react"
 
-export const supplierToDeleteId = signal("")
+export const selectedSupplier = signal<SupplierModel>({
+    id: "",
+    businessName: "",
+    tradeName: "",
+    ruc: "",
+    phoneNumber: "",
+    email: "",
+    website: "",
+    physicalAddress: "",
+    country: "",
+    annualReportInUSD: 0,
+    lastModificationDate: new Date()
+})
 
 interface params {
     handleView: () => void,
@@ -70,13 +82,18 @@ export const getColumns = (params: params): ColumnDef<SupplierModel>[] => {
                             <EyeIcon className="mr-3"/> View
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={params.handleEdit}>
-                            <Edit className="mr-3"/><Link to={"/edit-supplier"} state={{supplier: suppliers.value[+row.id]}}>Edit</Link>
+                        <DropdownMenuItem onClick={
+                            () => {
+                                selectedSupplier.value = suppliers.value[+row.id]
+                                params.handleEdit()
+                            }
+                        }>
+                            <Edit className="mr-3"/> Edit
                         </DropdownMenuItem>
 
                         <DropdownMenuItem onClick={
                             () => {
-                                supplierToDeleteId.value = suppliers.value[+row.id].id!
+                                selectedSupplier.value = suppliers.value[+row.id]
                                 params.handleDelete()
                             }
                         }>

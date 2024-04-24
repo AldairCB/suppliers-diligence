@@ -185,7 +185,10 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                     </Grid>
-                    <Button type="submit">Confirm changes</Button>
+                    <Box className="flex justify-end">
+                        <Button type="button" variant={"destructive"} onClick={() => navigate(-1)}>Cancel</Button>
+                        <Button className="ml-5" type="submit">Confirm Changes</Button>
+                    </Box>
                 </form>
             </Form>
         </Box>                    

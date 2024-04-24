@@ -183,7 +183,10 @@ export function NewSupplierForm() {
                             )}/>
                         </Grid>
                     </Grid>
-                    <Button type="submit">Submit</Button>
+                    <Box className="flex justify-end">
+                        <Button type="button" variant={"destructive"} onClick={() => navigate(-1)}>Cancel</Button>
+                        <Button className="ml-5" type="submit">Submit</Button>
+                    </Box>
                 </form>
             </Form>
         </Box>                    

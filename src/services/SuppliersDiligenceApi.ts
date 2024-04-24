@@ -24,7 +24,6 @@ export default class SuppliersDiligenceApi {
 
     injectAccessToken(accessToken: string) {
         axios.interceptors.request.use((config) => {
-            console.log('Injecting access token...');
             config.headers.Authorization = `Bearer ${accessToken}`;
             return config;
         })
@@ -70,10 +69,7 @@ export default class SuppliersDiligenceApi {
 
     async updateSupplier(supplier: SupplierModel) {
         const id = supplier.id
-        
-        console.log(supplier)
         delete (supplier as {id?: string}).id;
-        console.log(supplier)
 
         let headers = {
             "Accept": "*/*",
