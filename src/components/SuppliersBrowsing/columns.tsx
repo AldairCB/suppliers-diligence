@@ -58,7 +58,7 @@ export const getColumns = (params: params): ColumnDef<SupplierModel>[] => {
                     <ArrowUpDown/>
                 </Button>
             },
-            cell: ({row}) => {
+            cell: ({row}) => { // this is to modify the cell output, in this case we want to format the date before displaying it
                 const date = row.getValue('lastModificationDate');
                 return <div>
                     {new Date(date as string).toLocaleDateString()}

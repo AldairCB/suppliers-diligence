@@ -19,7 +19,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Box } from "@mui/material"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 interface DataTableProps<TData, TValue> {

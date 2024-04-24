@@ -16,6 +16,8 @@ import { Box, Typography } from "@mui/material"
 import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { selectedSupplier } from "../SuppliersBrowsing/columns"
 import { Separator } from "@/components/ui/separator"
+import { ScreeningResultsModel } from "@/models/ScreeningResultsModel"
+import { useNavigate } from "react-router-dom"
 
 interface ScreeningDialogProps {
     open: boolean,
@@ -27,13 +29,12 @@ export function ScreeningDialog({
     onOpenChange
 }: ScreeningDialogProps) {
     const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance();
-
+    const navigate = useNavigate()
     const [ofac, setOfac] = useState(false)
+    const [screeningResults, setScreeningResults] = useState<ScreeningResultsModel|null>(null)
     const [worldBank, setWorldBank] = useState(false)
     const [offshoreLeaks, setOffshoreLeaks] = useState(false)
-
-    type screeningStatus = "screening" | "results" | "noResults"
-    const [screeningStatus, setScreeningStatus] = useState<screeningStatus>("noResults")
+    const [isScreening, setIsScreening] = useState(false)
     
     const sources = [
         {
@@ -77,30 +78,33 @@ export function ScreeningDialog({
                     </Box>
                 </DialogDescription>
                 {/* Results */}
-                {screeningStatus != "results" ? null : <Box className="text-center">
+                {!isScreening && screeningResults ? <Box className="text-center">
                     <Separator className="my-2" />
-                    <Button variant="link">{`Found ${2} hits. View details`}</Button>
-                </Box>}
+                    <Button variant="link" onClick={() => {
+                        navigate("/screening-results", { state: { screeningResults: screeningResults } })
+                    }}>{`Found ${screeningResults!.numHits} hits. View details`}</Button>
+                </Box> : null}
             </DialogHeader>
             <DialogFooter className="sm:justify-end">
                 <DialogClose asChild>
-                    <Button variant="ghost">Cancel</Button>
+                    <Button variant="ghost" disabled={isScreening} onClick={() => {
+                        setScreeningResults(null)
+                    }}>Cancel</Button>
                 </DialogClose>
                 <Button
                     type="button"
                     variant="default"
-                    disabled={ofac === false && worldBank === false && offshoreLeaks === false}
+                    disabled={(ofac === false && worldBank === false && offshoreLeaks === false) || isScreening}
                     onClick={async () => {
-                        setScreeningStatus("screening")
+                        setIsScreening(true)
                         const response = await suppliersDiligenceApi.screenEntity(selectedSupplier.value.businessName, ofac, worldBank)
-                        if (response.data) {
-                            setScreeningStatus("results")
+                        if (response) {
+                            setScreeningResults(response)
+                            setIsScreening(false)
                         }
-                        console.log(response)
                     }}>
-                    Start Screening
+                    {isScreening ? "Screening..." : "Start Screening"}
                 </Button>
-
             </DialogFooter>
         </DialogContent>
     </Dialog>

@@ -7,6 +7,7 @@ import { NewSupplierForm } from './components/NewSupplierForm/NewSupplierForm'
 import EditSupplierForm from './components/EditSupplierForm/EditSupplierForm'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { ReactNode } from 'react'
+import { ScreeningResultsTable } from './components/ScreeningResultsTable/ScreeningResultsTable'
 
 type ProtectedRouteProps = {
     children: ReactNode
@@ -30,6 +31,7 @@ function App() {
                     <Route path="/" element={<ProtectedRoute><SuppliersBrowsing /></ProtectedRoute>} />
                     <Route path="/new-supplier" element={<ProtectedRoute><NewSupplierForm /></ProtectedRoute>} />
                     <Route path="/edit-supplier" element={<ProtectedRoute><EditSupplierForm /></ProtectedRoute>} />
+                    <Route path="/screening-results" element={<ProtectedRoute><ScreeningResultsTable /></ProtectedRoute>} />
                 </Routes>
             </AuthProvider>
         </Box>
