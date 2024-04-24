@@ -51,6 +51,7 @@ export default function SuppliersBrowsing() {
         <Typography variant="h5">Loading...</Typography>
     </Box> : <Box>
         <Box className="mb-4 text-right">
+            <Button variant="destructive" onClick={() => logout()}>Logout</Button>
             <Button variant="default">
                 <Link to={"/new-supplier"}>Add Supplier</Link>
             </Button>
