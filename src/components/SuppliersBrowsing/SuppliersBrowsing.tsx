@@ -1,8 +1,8 @@
 import { signal } from '@preact/signals-react'
-import { DataTable } from '../DataTable/DataTable'
+import { DataTable } from '@/components/DataTable/DataTable'
 import { getColumns, selectedSupplier } from './columns'
 import SuppliersDiligenceApi from '@/services/SuppliersDiligenceApi'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import { Box, Typography } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignals } from '@preact/signals-react/runtime'
@@ -18,6 +18,7 @@ import {
     DialogHeader,
     DialogTitle
   } from "@/components/ui/dialog"
+import { ScreeningDialog } from '@/components/ScreeningDialog/ScreeningDialog'
 
 // signal that able to be globally available for all the components when exporting them
 export const suppliers = signal<SupplierModel[]>([])
@@ -84,27 +85,6 @@ export default function SuppliersBrowsing() {
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-
-        <Dialog open={showScreeningDialog} onOpenChange={
-            (open) => setShowScreeningDialog(open)
-        }>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Entity Screening</DialogTitle>
-                    <DialogDescription>
-                        Select the sources for the screening
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="sm:justify-end">
-                    <DialogClose asChild>
-                        <Button type="button" variant="default" onClick={() => {
-                            console.log('Screening...')
-                        }}>
-                            Start Screening
-                        </Button>
-                    </DialogClose>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <ScreeningDialog open={showScreeningDialog} onOpenChange={(open) => setShowScreeningDialog(open)}/>
     </Box>
 }
