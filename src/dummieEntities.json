@@ -1,0 +1,57 @@
+[
+    {
+        "businessName": "Acme Corporation",
+        "tradeName": "Acme Widgets",
+        "ruc": "12345678901",
+        "phoneNumber": "15555551212",
+        "email": "info@acmewidgets.com",
+        "website": "https://www.acmewidgets.com",
+        "physicalAddress": "100 Main St, Anytown, CA 90210",
+        "country": "USA",
+        "annualReportInUSD": 15000000
+    },
+    {
+        "businessName": "Green Earth Solutions",
+        "tradeName": "Eco-Friendly Products",
+        "ruc": "98734210124",
+        "phoneNumber": "491578963210",
+        "email": "info@ecofriendlyproducts.com",
+        "website": "https://www.ecofriendlyproducts.de",
+        "physicalAddress": "5 Rosenstrasse, Berlin, Germany",
+        "country": "Germany",
+        "annualReportInUSD": 8000000
+    },
+    {
+        "businessName": "Fast Track Delivery",
+        "tradeName": "Same Day Express",
+        "ruc": "01234567894",
+        "phoneNumber": "862156487321",
+        "email": "info@samedayexpress.cn",
+        "website": "https://www.samedayexpress.cn",
+        "physicalAddress": "888 Shanghai Tower, Shanghai, China",
+        "country": "China",
+        "annualReportInUSD": 30000000
+    },
+    {
+        "businessName": "XINJIANG XINJIAO CONSTRUCTION",
+        "tradeName": "XINJIANG XINJIAO CONSTRUCTION",
+        "ruc": "0134678134",
+        "phoneNumber": "862156487321",
+        "email": "info@xinjangconst.cn",
+        "website": "https://www.xinjiang.cn",
+        "physicalAddress": "888 Shanghai Tower, Shanghai, China",
+        "country": "China",
+        "annualReportInUSD": 30000000
+    },
+    {
+        "businessName": "SEPAH-E QODS",
+        "tradeName": "SEPAH-E QODS",
+        "ruc": "0123743484",
+        "phoneNumber": "862156487321",
+        "email": "info@sepah.com",
+        "website": "https://www.sepah.com",
+        "physicalAddress": "888 Shanghai Tower, Shanghai",
+        "country": "Israel",
+        "annualReportInUSD": 30000000
+    }
+]

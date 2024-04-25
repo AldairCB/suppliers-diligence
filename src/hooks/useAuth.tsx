@@ -8,15 +8,15 @@ type Props = {
 }
 
 type IAuthContext = {
-    user: any,
-    login: (email: string, password: string) => Promise<void>; // Assuming async login
-    logout: () => void;
+    user: any
+    login: (email: string, password: string) => Promise<void> // Assuming async login
+    logout: () => void
 }
 
 const initialValues = {
     user: {},
     login: async () => {},
-    logout: () => {},
+    logout: () => {}
 }
 
 const AuthContext = createContext<IAuthContext>(initialValues)
@@ -29,7 +29,6 @@ export const AuthProvider = ({children}: Props) => {
     const login = async (email: string, password: string) => {
         const response = await suppliersDiligenceApi.authenticate(email, password)
         setUser({email, ...response})
-        suppliersDiligenceApi.injectAccessToken(response.accessToken)
         navigate('/')
     }
     const logout = () => {
@@ -48,7 +47,7 @@ export const AuthProvider = ({children}: Props) => {
         () => ({
             user,
             login,
-            logout,
+            logout
         }),
         [user]
     );

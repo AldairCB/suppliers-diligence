@@ -26,12 +26,14 @@ export const suppliers = signal<SupplierModel[]>([])
 export default function SuppliersBrowsing() {
     // in preact v2 we need to add this to the component in order to be able to use global signals() inside a component
     useSignals()
-    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance();
+    const { user, logout } = useAuth()
+    if(!user) { logout() }
+    
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken);
 
     const [isLoading, setIsLoading] = useState(true)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [showScreeningDialog, setShowScreeningDialog] = useState(false)
-    const { logout } = useAuth()
     const navigate = useNavigate()
 
     async function fetchSuppliers(){

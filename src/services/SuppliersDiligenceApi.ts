@@ -6,7 +6,14 @@ export default class SuppliersDiligenceApi {
     private static instance: SuppliersDiligenceApi;
     readonly baseURL: string = "http://localhost:5284"
     
-    public static getInstance(): SuppliersDiligenceApi {
+    public static getInstance(accessToken?: string): SuppliersDiligenceApi {
+        // Injection of access token
+        if (accessToken) {
+            axios.interceptors.request.use((config) => {
+                config.headers.Authorization = `Bearer ${accessToken}`;
+                return config;
+            })
+        }
         // Singleton Pattern
         if (!SuppliersDiligenceApi.instance) {
             SuppliersDiligenceApi.instance = new SuppliersDiligenceApi();
@@ -19,13 +26,6 @@ export default class SuppliersDiligenceApi {
             return response
         }, (error) => {
             return Promise.reject(error);
-        })
-    }
-
-    injectAccessToken(accessToken: string) {
-        axios.interceptors.request.use((config) => {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-            return config;
         })
     }
 

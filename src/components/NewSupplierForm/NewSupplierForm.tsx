@@ -17,6 +17,7 @@ import { Box, Grid } from "@mui/material"
 import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/hooks/useAuth"
 
 
 const formSchema = z.object({
@@ -40,7 +41,8 @@ const formSchema = z.object({
 })
 
 export function NewSupplierForm() {
-    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance()
+    const { user } = useAuth()
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken)
     const navigate = useNavigate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

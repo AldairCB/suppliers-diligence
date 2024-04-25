@@ -18,6 +18,7 @@ import { selectedSupplier } from "../SuppliersBrowsing/columns"
 import { Separator } from "@/components/ui/separator"
 import { ScreeningResultsModel } from "@/models/ScreeningResultsModel"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/hooks/useAuth"
 
 interface ScreeningDialogProps {
     open: boolean,
@@ -28,7 +29,8 @@ export function ScreeningDialog({
     open,
     onOpenChange
 }: ScreeningDialogProps) {
-    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance();
+    const { user } = useAuth()
+    const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken);
     const navigate = useNavigate()
     const [ofac, setOfac] = useState(false)
     const [screeningResults, setScreeningResults] = useState<ScreeningResultsModel|null>(null)
