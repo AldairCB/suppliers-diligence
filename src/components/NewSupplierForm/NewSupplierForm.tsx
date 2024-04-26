@@ -18,7 +18,8 @@ import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
-
+import { Combobox } from "../ui/combobox"
+import { Country } from "country-state-city"
 
 const formSchema = z.object({
     businessName: z.string().min(2, {
@@ -44,6 +45,9 @@ export function NewSupplierForm() {
     const { user } = useAuth()
     const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken)
     const navigate = useNavigate()
+
+    const countries = Country.getAllCountries().map(country => country.name)
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -72,11 +76,9 @@ export function NewSupplierForm() {
             country: values.country,
             annualReportInUSD: +values.annualReportInUSD //this converts to number
         }
-        
         suppliersDiligenceApi.createSupplier(supplier).then(
             () => navigate(-1)
         )
-        
     }
 
     return (
@@ -175,7 +177,19 @@ export function NewSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={5}>
-                            <FormField control={form.control} name="country" render={({ field }) => (
+                            <FormLabel>Country</FormLabel>
+                            <Box className="mt-2">
+                                <Combobox
+                                    labelPlaceHolder="Select a country"
+                                    searchPlaceholder="Search country..."
+                                    emptyMessage="No country found."
+                                    options={countries}
+                                    onSelect={(selected) => {
+                                        form.setValue("country", selected)
+                                    }}
+                                />
+                            </Box>
+                            {/* <FormField control={form.control} name="country" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Country</FormLabel>
                                     <FormControl>
@@ -183,9 +197,10 @@ export function NewSupplierForm() {
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
-                            )}/>
+                            )}/> */}
                         </Grid>
                     </Grid>
+
                     <Box className="flex justify-end">
                         <Button type="button" variant={"destructive"} onClick={() => navigate(-1)}>Cancel</Button>
                         <Button className="ml-5" type="submit">Submit</Button>
