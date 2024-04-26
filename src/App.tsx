@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import SuppliersBrowsing from './components/SuppliersBrowsing/SuppliersBrowsing'
 import { Login } from './components/Login/Login'
 import { NewSupplierForm } from './components/NewSupplierForm/NewSupplierForm'
-import EditSupplierForm from './components/EditSupplierForm/EditSupplierForm'
+import SupplierDetailsView from './components/SupplierDetailsView/SupplierDetailsView'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { ReactNode } from 'react'
 import { ScreeningResultsTable } from './components/ScreeningResultsTable/ScreeningResultsTable'
@@ -30,7 +30,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={<ProtectedRoute><SuppliersBrowsing /></ProtectedRoute>} />
                     <Route path="/new-supplier" element={<ProtectedRoute><NewSupplierForm /></ProtectedRoute>} />
-                    <Route path="/edit-supplier" element={<ProtectedRoute><EditSupplierForm /></ProtectedRoute>} />
+                    <Route path="/supplier-details" element={<ProtectedRoute><SupplierDetailsView /></ProtectedRoute>} />
                     <Route path="/screening-results" element={<ProtectedRoute><ScreeningResultsTable /></ProtectedRoute>} />
                 </Routes>
             </AuthProvider>

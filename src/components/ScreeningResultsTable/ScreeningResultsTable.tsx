@@ -1,4 +1,3 @@
-import { Box } from "@mui/material"
 import { useLocation, useNavigate } from "react-router-dom"
 import { DataTable } from "@/components/DataTable/DataTable"
 import { columns } from "./columns"
@@ -37,8 +36,8 @@ export function ScreeningResultsTable() {
 
     const data: genericResult[] = ofacResults.concat(worldBankResults)
 
-    return <Box>
+    return <>
+        <Button className="flex items-center justify-start mb-5" variant="outline" onClick={() => navigate(-1)}>Go back</Button>
         <DataTable columns={columns} data={data}></DataTable>
-        <Button variant="outline" onClick={() => navigate(-1)}>Go back</Button>
-    </Box>
+    </>
 }

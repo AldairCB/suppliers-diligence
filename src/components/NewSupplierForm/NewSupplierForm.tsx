@@ -80,7 +80,8 @@ export function NewSupplierForm() {
     }
 
     return (
-        <Box>   
+        <>
+            <Button className="flex items-center justify-start mb-5" variant="outline" onClick={() => navigate(-1)}>Go back</Button>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 text-left">
                     {/* MAX xs = 12 */}
@@ -191,6 +192,6 @@ export function NewSupplierForm() {
                     </Box>
                 </form>
             </Form>
-        </Box>                    
+        </>                    
     )
 }

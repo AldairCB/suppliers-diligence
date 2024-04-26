@@ -18,6 +18,8 @@ import SuppliersDiligenceApi from "@/services/SuppliersDiligenceApi"
 import { SupplierModel } from "@/models/SupplierModel";
 import { useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
+import { signal } from "@preact/signals-react"
+import { useSignals } from "@preact/signals-react/runtime"
 
 
 const formSchema = z.object({
@@ -40,7 +42,10 @@ const formSchema = z.object({
     annualReportInUSD: z.string()
 })
 
-export default function EditSupplierForm() {
+export const isEditing = signal(false)
+
+export default function SupplierDetailsView() {
+    useSignals()
     const { user } = useAuth()
     const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken)
     const navigate = useNavigate()
@@ -81,14 +86,18 @@ export default function EditSupplierForm() {
         )
     }
 
+    //TODO: When canceling editing, we are not checking if there are unsaved changes, 
+    // and we will display data on the fields with the modified data but canceled. NEED FIX!
+
     return (
-        <Box>   
+        <>
+            <Button className="flex items-center justify-start mb-5" variant="outline" onClick={() => navigate(-1)}>Go back</Button>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 text-left">
                     {/* MAX xs = 12 */}
                     <Grid container spacing={2}>
                         <Grid item xs={9}>
-                            <FormField control={form.control} name="tradeName" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="tradeName" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Trade Name</FormLabel>
                                     <FormControl>
@@ -99,7 +108,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormField control={form.control} name="annualReportInUSD" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="annualReportInUSD" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Annual Report In USD</FormLabel>
                                     <FormControl>
@@ -110,7 +119,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={9}>
-                            <FormField control={form.control} name="businessName" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="businessName" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Business Name</FormLabel>
                                     <FormControl>
@@ -121,7 +130,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormField control={form.control} name="ruc" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="ruc" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>RUC</FormLabel>
                                     <FormControl>
@@ -132,7 +141,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={2}>
-                            <FormField control={form.control} name="phoneNumber" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="phoneNumber" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Phone Number</FormLabel>
                                     <FormControl>
@@ -143,7 +152,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={5}>
-                            <FormField control={form.control} name="email" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="email" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
@@ -154,7 +163,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={5}>
-                            <FormField control={form.control} name="website" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="website" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Website</FormLabel>
                                     <FormControl>
@@ -165,7 +174,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={7}>
-                            <FormField control={form.control} name="physicalAddress" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="physicalAddress" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Physical Address</FormLabel>
                                     <FormControl>
@@ -176,7 +185,7 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                         <Grid item xs={5}>
-                            <FormField control={form.control} name="country" render={({ field }) => (
+                            <FormField disabled={!isEditing.value} control={form.control} name="country" render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Country</FormLabel>
                                     <FormControl>
@@ -187,12 +196,18 @@ export default function EditSupplierForm() {
                             )}/>
                         </Grid>
                     </Grid>
+
                     <Box className="flex justify-end">
-                        <Button type="button" variant={"destructive"} onClick={() => navigate(-1)}>Cancel</Button>
-                        <Button className="ml-5" type="submit">Confirm Changes</Button>
+                        {isEditing.value ? <>
+                            <Button type="button" variant={"destructive"} onClick={() => {
+                                isEditing.value = false
+                                // navigate(-1)
+                            }}>Cancel</Button>
+                            <Button className="ml-5" type="submit">Confirm Changes</Button>
+                        </> : <Button type="button" onClick={() => isEditing.value = true}>Edit</Button>}
                     </Box>
                 </form>
             </Form>
-        </Box>                    
+        </>                    
     )
 }

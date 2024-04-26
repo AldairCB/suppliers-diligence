@@ -19,6 +19,8 @@ import {
     DialogTitle
   } from "@/components/ui/dialog"
 import { ScreeningDialog } from '@/components/ScreeningDialog/ScreeningDialog'
+import { LogOut } from 'lucide-react'
+import { isEditing } from '../SupplierDetailsView/SupplierDetailsView'
 
 // signal that able to be globally available for all the components when exporting them
 export const suppliers = signal<SupplierModel[]>([])
@@ -28,7 +30,7 @@ export default function SuppliersBrowsing() {
     useSignals()
     const { user, logout } = useAuth()
     if(!user) { logout() }
-    
+
     const suppliersDiligenceApi = SuppliersDiligenceApi.getInstance(user.accessToken);
 
     const [isLoading, setIsLoading] = useState(true)
@@ -49,18 +51,27 @@ export default function SuppliersBrowsing() {
         }
     }, [])
 
-    return isLoading ? <Box>
+    return isLoading ? <>
         <Typography variant="h5">Loading...</Typography>
-    </Box> : <Box>
-        <Box className="mb-4 text-right">
-            <Button variant="destructive" onClick={() => logout()}>Logout</Button>
+    </> : <Box>
+        <Box className="mb-4 space-x-96">
+            <Button className='mr-4 align-middle' variant="destructive" onClick={() => logout()}>
+                <LogOut className='mr-2 align-middle'/>
+                Logout
+            </Button>
             <Button variant="default">
                 <Link to={"/new-supplier"}>Add Supplier</Link>
             </Button>
         </Box>
         <DataTable columns={getColumns({
-            handleView: () => { console.log("Viewing") },
-            handleEdit: () => { navigate("/edit-supplier", { state: { supplier: selectedSupplier.value } }) },
+            handleView: () => {
+                isEditing.value = false
+                navigate("/supplier-details", { state: { supplier: selectedSupplier.value } })
+            },
+            handleEdit: () => {
+                isEditing.value = true
+                navigate("/supplier-details", { state: { supplier: selectedSupplier.value } })
+            },
             handleDelete: () => { setShowDeleteDialog(true) },
             handleScreen: () => { setShowScreeningDialog(true) }
         })} data={suppliers.value}/>
