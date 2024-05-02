@@ -126,7 +126,7 @@ export function NewSupplierForm() {
                                 <FormItem>
                                     <FormLabel>RUC</FormLabel>
                                     <FormControl>
-                                        <Input type="number" {...field} />
+                                        <Input maxLength={11} type="number" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -178,7 +178,7 @@ export function NewSupplierForm() {
                         </Grid>
                         <Grid item xs={5}>
                             <FormLabel>Country</FormLabel>
-                            <Box className="mt-2">
+                            <Box className="flex flex-row mt-2">
                                 <Combobox
                                     labelPlaceHolder="Select a country"
                                     searchPlaceholder="Search country..."

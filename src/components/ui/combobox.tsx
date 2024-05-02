@@ -44,13 +44,15 @@ export function Combobox({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="justify-between grow"
+                    // "grow" tells the element to fill the whole available space
+                    // previously it was set to w-[200px] to match the width of the popover
                 >
                     {selected ? options.find((option) => option === selected) : labelPlaceHolder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[300px] p-0">
                 <Command>
                     <CommandInput placeholder={searchPlaceholder} />
                     <CommandList>

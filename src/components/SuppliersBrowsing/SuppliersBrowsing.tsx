@@ -3,7 +3,7 @@ import { DataTable } from '@/components/DataTable/DataTable'
 import { getColumns, selectedSupplier } from './columns'
 import SuppliersDiligenceApi from '@/services/SuppliersDiligenceApi'
 import { Button } from '@/components/ui/button'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignals } from '@preact/signals-react/runtime'
 import { SupplierModel } from '@/models/SupplierModel'
@@ -21,6 +21,7 @@ import {
 import { ScreeningDialog } from '@/components/ScreeningDialog/ScreeningDialog'
 import { LogOut } from 'lucide-react'
 import { isEditing } from '../SupplierDetailsView/SupplierDetailsView'
+import { SyncLoader } from 'react-spinners'
 
 // signal that able to be globally available for all the components when exporting them
 export const suppliers = signal<SupplierModel[]>([])
@@ -39,29 +40,35 @@ export default function SuppliersBrowsing() {
     const navigate = useNavigate()
 
     async function fetchSuppliers(){
-        suppliers.value = await suppliersDiligenceApi.getAllSuppliers()
-    }
-
-    useEffect(() => {
-        try {
-            fetchSuppliers().then(() => setIsLoading(false))
+        try{
+            suppliers.value = await suppliersDiligenceApi.getAllSuppliers()
+            setIsLoading(false)
         } catch (error) {
-            // Thros error when accessToken expires, no refresh implemented so we just logout the user for now
+            // accessToken expired, no refresh implemented so we just logout the user for now sad sad asdas dasdsad asd asd as 
             logout()
         }
+    }
+
+    // Use effect is called on the 3 life cycle phases of a component: mount, update, and unmount.
+    // it takes the first parameters, the callback function, and optionally an array of dependencies.
+    // if we provide an empty array as dependency, it will only be called for the mount phase.
+    useEffect(() => {
+        fetchSuppliers()
     }, [])
 
     return isLoading ? <>
-        <Typography variant="h5">Loading...</Typography>
-    </> : <Box>
-        <Box className="mb-4 space-x-96">
-            <Button className='mr-4 align-middle' variant="destructive" onClick={() => logout()}>
-                <LogOut className='mr-2 align-middle'/>
+        <SyncLoader color="white" />
+    </> : <>
+        <Box className="flex justify-between mb-6">
+            <Button className="align-middle" variant="destructive" onClick={() => logout()}>
+                <LogOut className="mr-2 align-middle"/>
                 Logout
             </Button>
-            <Button variant="default">
-                <Link to={"/new-supplier"}>Add Supplier</Link>
-            </Button>
+            <Link to={"/new-supplier"}>
+                <Button className="align-middle" variant="default">
+                    Add Supplier
+                </Button>
+            </Link>
         </Box>
         <DataTable columns={getColumns({
             handleView: () => {
@@ -100,5 +107,5 @@ export default function SuppliersBrowsing() {
             </DialogContent>
         </Dialog>
         <ScreeningDialog open={showScreeningDialog} onOpenChange={(open) => setShowScreeningDialog(open)}/>
-    </Box>
+    </>
 }
